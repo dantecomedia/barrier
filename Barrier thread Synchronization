@@ -1,0 +1,61 @@
+#include<pthread.h>
+#include<stdio.h>
+#include<conio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<stdio.h>
+int nos_threads;
+void* thread_execute(void* id);
+void* barrier_point(void* id);
+void* compute(void* idp);
+void* compute(void* idp)    // function for each thread
+{
+	int id=*(int*)idp;  
+	thread_execute(void* id);    // for thread id
+	barrier_point(void* id);		// calling barrier point function to check if the thread is still left to reach the barrier
+	}
+void* thread_execute(void* id)   // lettting the thread do some work 
+{
+	printf("the thread with id %d is executing \n",id);
+	sleep(id);    //lapsing the executing time for thread to get executed
+	}
+void* barrier_point(void* id)
+{
+int counter = 0;
+pthread_cond_t condition;
+pthread_mutex_t condition_mutex;
+ pthread_mutex_lock(&condition_mutex);
+  counter++;
+  if (counter == num_threads) {
+    counter = 0;
+    pthread_cond_broadcast(&condition);
+  } else {
+    pthread_cond_wait(&condition, &condition_mutex);
+  }
+  /* unlock the condition mutex */
+  pthread_mutex_unlock(&condition_mutex);
+  printf("thread with id %d is done executing \n",id);
+}
+int main(int argc,char *argv[])
+{
+	if(argc<2)
+	{
+		printf("Pass the number of threads to use\n");
+		return 0;
+	}
+	else 
+	{
+		nos_threads=atoi(argv[1]);
+	}
+	pthread_t threads[nos_threads];
+  int ids[nos_threads];
+  int i;
+   for (i = 0; i < nos_threads; i++) {
+    ids[i] = i;
+    pthread_create(&threads[i], NULL, compute , &ids[i]);
+}
+    for (i = 0; i < nos_threads; i++) {
+    pthread_join(threads[i], NULL);
+  }
+  return 0;
+  }
