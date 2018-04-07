@@ -4,7 +4,9 @@
 #include<stdlib.h>
 #include<string.h>
 #include<stdio.h>
+#include "barrier.h"
 int nos_threads;
+int barrier_init (barrier_t *barrier, int count);  // use of barrier_init api
 void* thread_execute(void* id);
 void* barrier_point(void* id);
 void* compute(void* idp);
@@ -19,6 +21,7 @@ void* thread_execute(void* id)   // lettting the thread do some work
 	printf("the thread with id %d is executing \n",id);
 	sleep(id);    //lapsing the executing time for thread to get executed
 	}
+
 void* barrier_point(void* id)
 { 
 int status;
@@ -29,11 +32,20 @@ pthread_mutex_t condition_mutex;
   counter++;
   if (counter == num_threads) {
     counter = 0;
-    pthread_cond_broadcast(&condition);
-  } else {
-    pthread_cond_wait(&condition, &condition_mutex);
-  }
+    status=pthread_cond_broadcast(&condition);
+  } 
   /* unlock the condition mutex */
+  if(status!=0)
+  {
+  	return status;
+	}
+  status=pthread_cond_wait(&condition, &condition_mutex);  
+  
+	if(status!=0)
+	{
+	return status;
+	}
+	
   pthread_mutex_unlock(&condition_mutex);
   printf("thread with id %d is done executing \n",id);
 }
