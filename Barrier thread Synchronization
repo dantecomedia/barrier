@@ -20,7 +20,8 @@ void* thread_execute(void* id)   // lettting the thread do some work
 	sleep(id);    //lapsing the executing time for thread to get executed
 	}
 void* barrier_point(void* id)
-{
+{ 
+int status;
 int counter = 0;
 pthread_cond_t condition;
 pthread_mutex_t condition_mutex;
