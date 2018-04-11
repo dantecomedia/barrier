@@ -4,9 +4,7 @@
 #include<stdlib.h>
 #include<string.h>
 #include<stdio.h>
-#include "barrier.h"
 int nos_threads;
-int barrier_init (barrier_t *barrier, int count);  // use of barrier_init api
 void* thread_execute(void* id);
 void* barrier_point(void* id);
 void* compute(void* idp);
