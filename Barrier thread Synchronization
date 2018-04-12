@@ -32,7 +32,7 @@ pthread_mutex_t condition_mutex;
     counter = 0;
     status=pthread_cond_broadcast(&condition);
   } 
-  /* unlock the condition mutex */
+ 
   if(status!=0)
   {
   	return status;
@@ -44,7 +44,7 @@ pthread_mutex_t condition_mutex;
 	return status;
 	}
 	
-  pthread_mutex_unlock(&condition_mutex);
+  pthread_mutex_unlock(&condition_mutex); /* unlock the condition mutex */
   printf("thread with id %d is done executing \n",id);
 }
 int main(int argc,char *argv[])
