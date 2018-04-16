@@ -27,12 +27,12 @@ void* barrier_point(void* id)
 
 int t_id=*(int*)id;
 int t=2;
-printf("THREAD %d 			 %d sec\n",t_id,t);
+printf("THREAD %d 			 %d sec\n",t_id+1,t);
 sleep(t);
-printf("THREAD id %d Ready \n",t_id);
+printf("THREAD id %d Ready \n",t_id+1);
 
 pthread_barrier_wait(&barrier);
-printf("THREAD %d   Released \n",t_id);
+printf("THREAD %d   Released \n",t_id+1);
 c++;
 
 return NULL;
