@@ -5,9 +5,11 @@
 #include<string.h>
 #include<stdio.h>
 int nos_threads;
-void* thread_execute(void* id);
+int c=0;
+pthread_barrier_t barrier;
+//void* thread_execute(void* id);
 void* barrier_point(void* id);
-void* compute(void* idp);
+/*void* compute(void* idp);
 void* compute(void* idp)    // function for each thread
 {
 	int id=*(int*)idp;  
@@ -18,14 +20,23 @@ void* thread_execute(void* id)   // lettting the thread do some work
 {
 	printf("the thread with id %d is executing \n",id);
 	sleep(id);    //lapsing the executing time for thread to get executed
-	}
+	} */
 
 void* barrier_point(void* id)
 { 
-int status;
-int counter = 0;
-pthread_cond_t condition;
-pthread_mutex_t condition_mutex;
+
+int t_id=*(int*)id;
+int t=2;
+printf("THREAD %d 			 %d sec\n",t_id,t);
+sleep(t);
+printf("THREAD id %d Ready \n",t_id);
+
+pthread_barrier_wait(&barrier);
+printf("THREAD %d   Released \n",t_id);
+c++;
+
+return NULL;
+/*pthread_mutex_t condition_mutex;
  pthread_mutex_lock(&condition_mutex);
   counter++;
   if (counter == num_threads) {
@@ -45,28 +56,36 @@ pthread_mutex_t condition_mutex;
 	}
 	
   pthread_mutex_unlock(&condition_mutex); /* unlock the condition mutex */
-  printf("thread with id %d is done executing \n",id);
+   //printf("thread with id %d is done executing \n",id); */
 }
-int main(int argc,char *argv[])
+int main()
 {
-	if(argc<2)
-	{
-		printf("Pass the number of threads to use\n");
-		return 0;
-	}
-	else 
-	{
-		nos_threads=atoi(argv[1]);
-	}
+	int i;
+	printf("Pass the thread to be executed \n");
+	scanf("%d",&nos_threads);
 	pthread_t threads[nos_threads];
-  int ids[nos_threads];
-  int i;
-   for (i = 0; i < nos_threads; i++) {
+    int ids[nos_threads];
+    srand(time(NULL));
+    pthread_barrier_init(&barrier, NULL, nos_threads + 1);
+    for (i = 0; i < nos_threads; i++) {
     ids[i] = i;
-    pthread_create(&threads[i], NULL, compute , &ids[i]);
+    pthread_create(&threads[i], NULL, barrier_point , &ids[i]);
 }
+	printf("=================================\n");
+	printf("THREAD ID:			WAITING TIME \n");
+	pthread_barrier_wait(&barrier);
+	
     for (i = 0; i < nos_threads; i++) {
     pthread_join(threads[i], NULL);
   }
+  if (c==nos_threads)
+{
+	printf("All threads released successfully and  0\n");
+}
+else 
+{
+	printf("-1");
+}
+  
   return 0;
   }
