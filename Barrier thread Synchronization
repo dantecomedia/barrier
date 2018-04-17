@@ -6,6 +6,7 @@
 #include<stdio.h>
 int nos_threads;
 int c=0;
+int t; // allocating threshold time for each thread
 pthread_barrier_t barrier;
 //void* thread_execute(void* id);
 void* barrier_point(void* id);
@@ -26,7 +27,6 @@ void* barrier_point(void* id)
 { 
 
 int t_id=*(int*)id;
-int t=2;
 printf("THREAD %d 			 %d sec\n",t_id+1,t);
 sleep(t);
 printf("THREAD id %d Ready \n",t_id+1);
@@ -63,6 +63,8 @@ int main()
 	int i;
 	printf("Pass the thread to be executed \n");
 	scanf("%d",&nos_threads);
+	printf("Pass the threashold time for each thread \n");
+	scanf("%d",&t);
 	pthread_t threads[nos_threads];
     int ids[nos_threads];
     srand(time(NULL));
