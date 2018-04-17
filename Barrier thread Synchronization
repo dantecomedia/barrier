@@ -67,7 +67,7 @@ int main()
 	scanf("%d",&t);
 	pthread_t threads[nos_threads];
     int ids[nos_threads];
-    srand(time(NULL));
+    srand(time(1));
     pthread_barrier_init(&barrier, NULL, nos_threads + 1);
     for (i = 0; i < nos_threads; i++) {
     ids[i] = i;
